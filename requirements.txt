@@ -1,0 +1,15 @@
+# Core API
+fastapi==0.115.5
+pydantic==2.10.3
+python-dotenv==1.0.1
+mangum==0.17.0
+
+# LLM & AI
+langchain-openai==0.2.14
+langchain-groq==0.2.4
+langchain-core==0.3.37
+langgraph==0.2.60
+openai==1.58.1
+
+# Note: langchain-ollama and chromadb removed for serverless deployment
+# Vector DB is disabled for Vercel (use ENABLE_VECTOR_DB=false)
