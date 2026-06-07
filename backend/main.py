@@ -60,9 +60,11 @@ app.add_middleware(
         "http://localhost:5175",
         "http://localhost:5176",
         "http://localhost:3000",
-        "https://*.vercel.app",  # Allow all Vercel preview/production deployments
+        "https://testcase-generators.netlify.app",  # Your Netlify frontend
+        "https://*.netlify.app",  # Allow all Netlify deployments
+        "https://*.vercel.app",  # Allow all Vercel deployments
     ],
-    allow_origin_regex=r"https://.*\.vercel\.app",  # Regex for Vercel domains
+    allow_origin_regex=r"https://.*\.(vercel|netlify)\.app",  # Regex for Vercel and Netlify domains
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
