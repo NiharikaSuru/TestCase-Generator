@@ -19,7 +19,7 @@ interface Props {
   theme: "light" | "dark";
 }
 
-export default function TestOutput({ finalTests, testCode, testCases, language, framework, theme }: Props) {
+export default function TestOutput({ finalTests, testCode, testCases, language, framework: _framework, theme }: Props) {
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState<"cases" | "final" | "skeleton">("cases");
 
