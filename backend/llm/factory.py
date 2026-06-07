@@ -8,6 +8,13 @@ from langchain_groq import ChatGroq
 def get_llm(temperature: float = 0):
     """Return the configured chat model based on LLM_PROVIDER."""
     provider = os.getenv("LLM_PROVIDER", "ollama").strip().lower()
+    
+    # Debug logging
+    print(f"=== LLM Configuration ===")
+    print(f"LLM_PROVIDER (raw): '{os.getenv('LLM_PROVIDER')}'")
+    print(f"LLM_PROVIDER (processed): '{provider}'")
+    print(f"Available env vars: {list(os.environ.keys())}")
+    print(f"========================")
 
     if provider == "openai":
         model = os.getenv("OPENAI_MODEL", "gpt-4o")
