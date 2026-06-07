@@ -252,7 +252,7 @@ def run_assertion_agent(state: dict) -> dict:
         ),
     ]
 
-    response = invoke_llm_with_retry(llm, messages, max_retries=3)
+    response = invoke_llm_with_retry(llm, messages, max_retries=5)
     raw = response.content.strip()
 
     # Validate and clean the response

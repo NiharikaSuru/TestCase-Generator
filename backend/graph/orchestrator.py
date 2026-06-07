@@ -9,6 +9,8 @@ into a linear pipeline:
 The compiled graph is invoked by the FastAPI endpoint.
 """
 
+import os
+import time
 from typing import TypedDict, List, Any
 from langgraph.graph import StateGraph, END
 
@@ -16,6 +18,10 @@ from agents.code_analyzer import run_code_analyzer
 from agents.test_case_generator import run_test_case_generator
 from agents.test_code_writer import run_test_code_writer
 from agents.assertion_agent import run_assertion_agent
+
+
+# Rate limit delay between agents (seconds) - helps avoid hitting API limits
+INTER_AGENT_DELAY = float(os.getenv("INTER_AGENT_DELAY", "2.0"))
 
 
 class AgentState(TypedDict):
@@ -31,15 +37,26 @@ class AgentState(TypedDict):
     agent_steps: List[Any]      # Audit log of completed agent steps
 
 
+def rate_limited_agent_wrapper(agent_func):
+    """Wrapper to add delay after agent execution to prevent rate limits."""
+    def wrapper(state: AgentState) -> AgentState:
+        result = agent_func(state)
+        # Add delay after agent completes (except for the last agent)
+        if INTER_AGENT_DELAY > 0:
+            time.sleep(INTER_AGENT_DELAY)
+        return result
+    return wrapper
+
+
 def build_graph() -> StateGraph:
     """Constructs and compiles the LangGraph StateGraph."""
     graph = StateGraph(AgentState)
 
-    # Register the four agent nodes
-    graph.add_node("analyze_code", run_code_analyzer)
-    graph.add_node("generate_test_cases", run_test_case_generator)
-    graph.add_node("write_test_code", run_test_code_writer)
-    graph.add_node("add_assertions", run_assertion_agent)
+    # Register the four agent nodes with rate limiting wrappers
+    graph.add_node("analyze_code", rate_limited_agent_wrapper(run_code_analyzer))
+    graph.add_node("generate_test_cases", rate_limited_agent_wrapper(run_test_case_generator))
+    graph.add_node("write_test_code", rate_limited_agent_wrapper(run_test_code_writer))
+    graph.add_node("add_assertions", run_assertion_agent)  # Last agent doesn't need delay
 
     # Linear pipeline edges
     graph.set_entry_point("analyze_code")

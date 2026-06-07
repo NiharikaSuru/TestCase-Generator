@@ -29,14 +29,14 @@ def get_llm(temperature: float = 0):
         )
 
     if provider == "groq":
-        model = os.getenv("GROQ_MODEL", "llama-3.1-8b-instant")
+        model = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
         return ChatGroq(
             model=model, 
             temperature=temperature,
             timeout=120,  # 2 minute timeout
             max_retries=0,  # We handle retries manually with our retry helper
-            # Groq free tier has lower limits, so optimize token usage
-            max_tokens=4000  # Limit output tokens to avoid hitting rate limits
+            # Groq free tier has rate limits, optimize token usage
+            max_tokens=3000  # Limit output tokens to stay within rate limits
         )
 
     raise ValueError(

@@ -78,14 +78,14 @@ def retry_with_backoff(
     raise last_exception
 
 
-def invoke_llm_with_retry(llm, messages, max_retries: int = 3):
+def invoke_llm_with_retry(llm, messages, max_retries: int = 5):
     """
     Invoke an LLM with automatic retry on rate limits.
     
     Args:
         llm: LangChain chat model instance
         messages: List of messages to send
-        max_retries: Maximum number of retry attempts
+        max_retries: Maximum number of retry attempts (default 5 for rate limit handling)
         
     Returns:
         LLM response
@@ -93,6 +93,6 @@ def invoke_llm_with_retry(llm, messages, max_retries: int = 3):
     return retry_with_backoff(
         lambda: llm.invoke(messages),
         max_retries=max_retries,
-        initial_delay=2.0,
-        max_delay=30.0
+        initial_delay=3.0,  # Increased initial delay for rate limits
+        max_delay=60.0  # Increased max delay
     )
