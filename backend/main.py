@@ -160,6 +160,11 @@ async def generate_tests(request: GenerateTestRequest):
             detail="Request timeout: The LLM took too long to respond. Please try again with simpler code."
         )
     except Exception as exc:
+        # Log the full error for debugging
+        import traceback
+        print(f"ERROR: Unhandled exception in pipeline: {exc}")
+        print(f"Traceback: {traceback.format_exc()}")
+        
         sanitized_error = sanitize_error_message(exc)
         # Check if error message contains rate limit info
         error_lower = sanitized_error.lower()
