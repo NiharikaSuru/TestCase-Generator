@@ -171,7 +171,6 @@ function App() {
               {/* <p className="text-[11px] leading-5 text-slate-500 dark:text-slate-400">
                 Python, JavaScript, and TypeScript are supported. Output stays copy-ready in the right panel.
               </p> */}
-
               <button
                 type="button"
                 className="inline-flex items-center justify-center gap-2 rounded-2xl bg-sky-600 px-4 py-3 text-xs font-semibold text-white shadow-[0_16px_40px_rgba(2,132,199,0.28)] transition hover:-translate-y-0.5 hover:bg-sky-500 hover:shadow-[0_22px_44px_rgba(2,132,199,0.36)] disabled:cursor-not-allowed disabled:opacity-60 dark:bg-sky-500 dark:hover:bg-sky-400"
